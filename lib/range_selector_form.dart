@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_demo/randomizer_change_notifier.dart';
+import 'package:provider/provider.dart';
 
 typedef IntValueSetter = void Function(int value);
 
 class FormWidget extends StatelessWidget {
-  const FormWidget ({
+  const FormWidget({
     Key? key,
     required this.formKey,
-    required this.minValueSetter,
-    required this.maxValueSetter,
   }) : super(key: key);
 
   final GlobalKey<FormState> formKey;
-
-  final IntValueSetter minValueSetter;
-  final IntValueSetter maxValueSetter;
 
   @override
   Widget build(BuildContext context) {
@@ -27,15 +24,15 @@ class FormWidget extends StatelessWidget {
             FormFieldWidget(
               labelText: 'Minimum',
               // intValueSetter: (value) => _min = value,
-              intValueSetter: minValueSetter,
+              intValueSetter: (value) =>
+                  context.read<RandomizerChangeNotifier>().min = value,
             ),
-            const SizedBox(
-                height: 12
-            ),
+            const SizedBox(height: 12),
             FormFieldWidget(
               labelText: 'Maximum',
               // intValueSetter: (value) => _max = value,
-              intValueSetter: maxValueSetter,
+              intValueSetter: (value) =>
+                  context.read<RandomizerChangeNotifier>().max = value,
             ),
           ],
         ),
@@ -43,7 +40,6 @@ class FormWidget extends StatelessWidget {
     );
   }
 }
-
 
 class FormFieldWidget extends StatelessWidget {
   // Creating custom widget with optional key and mandatory labelText
@@ -54,6 +50,7 @@ class FormFieldWidget extends StatelessWidget {
   }) : super(key: key);
 
   final String labelText;
+
   // Create a callback function that takes in int as param
   final IntValueSetter intValueSetter;
 
